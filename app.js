@@ -1,6 +1,7 @@
 new Vue({
-    el:'#app1',
+    el:'#app',
     data: {
-        health:'Up and running'
+        playerHealth:100,
+        monsterHealth:100
     }
 })
