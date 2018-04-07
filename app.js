@@ -33,10 +33,18 @@ new Vue({
             this.checkWin();
         },
         heal: function () {
-
+            this.playerHealth +=10;
+            if (this.playerHealth > 100) {
+                this.playerHealth = 100;
+                this.monsterAttack();
+                return;
+            } 
+          
+            this.monsterAttack();
+  
         },
         giveUp: function () {
-
+            this.gameIsRunning=false;
         },
         calculateDamage: function (attackType) {
             if (attackType === 'attack') {
