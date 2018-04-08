@@ -3,7 +3,8 @@ new Vue({
     data: {
         playerHealth: 100,
         monsterHealth: 100,
-        gameIsRunning: false
+        gameIsRunning: false,
+        turns: []
     },
     methods: {
         startGame: function () {
@@ -14,17 +15,26 @@ new Vue({
         attack: function () {
             var damage = this.calculateDamage('attack');
             this.monsterHealth -= damage;
+            this.turns.unshift({
+                isPlayer: true,
+                text: 'Player hits Monster for ' + damage
+            });
 
             if (this.checkWin()) {
                 return;
             }
 
             this.monsterAttack();
-            this.checkWin();
+
         },
         specialAttack: function () {
             var damage = this.calculateDamage('specialAttack');
             this.monsterHealth -= damage;
+
+            this.turns.unshift({
+                isPlayer: true,
+                text: 'Player hits Monster for ' + damage
+            });
 
             if (this.checkWin()) {
                 return;
@@ -33,18 +43,18 @@ new Vue({
             this.checkWin();
         },
         heal: function () {
-            this.playerHealth +=10;
+            this.playerHealth += 10;
             if (this.playerHealth > 100) {
                 this.playerHealth = 100;
                 this.monsterAttack();
                 return;
-            } 
-          
+            }
+
             this.monsterAttack();
-  
+
         },
         giveUp: function () {
-            this.gameIsRunning=false;
+            this.gameIsRunning = false;
         },
         calculateDamage: function (attackType) {
             if (attackType === 'attack') {
@@ -77,9 +87,14 @@ new Vue({
             }
             return false;
         },
-        monsterAttack : function () {
+        monsterAttack: function () {
             damage = this.calculateDamage('attack');
             this.playerHealth -= damage;
+            this.checkWin();
+            this.turns.unshift({
+                isPlayer: false,
+                text: 'Monster hits Player for ' + damage
+            });
         }
     }
 })
